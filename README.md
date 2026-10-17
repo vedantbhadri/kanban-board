@@ -21,8 +21,6 @@ npm ci
 npm run dev
 ```
 
-Open [http://127.0.0.1:3000](http://127.0.0.1:3000).
-
 For a production build, run `npm run build` followed by `npm run start` from `frontend`.
 
 ## Checks
