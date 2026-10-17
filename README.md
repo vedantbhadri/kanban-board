@@ -2,6 +2,8 @@
 
 A simple, single-board Kanban app for organizing work from ideas to completion. It opens with sample cards so you can try it immediately.
 
+Built with AI assistance as a vibe coding project.
+
 ## Features
 
 - Five fixed columns that you can rename.
