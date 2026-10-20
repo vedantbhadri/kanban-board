@@ -15,7 +15,13 @@ Cards and columns are saved in SQLite. Chat history lasts for the current page s
 
 ## Run locally
 
-Install Docker, add your OpenRouter key to a root `.env` file using [`.env.example`](.env.example), then run:
+Install Docker and create a `.env` file in the repository root with your OpenRouter key:
+
+```dotenv
+OPENROUTER_API_KEY=your_openrouter_key
+```
+
+Then run:
 
 ```sh
 ./scripts/start.sh
