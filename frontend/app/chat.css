@@ -1,0 +1,11 @@
+.chat-sidebar{width:300px;flex:none;height:100vh;position:sticky;top:0;background:#fff;border-left:1px solid var(--line);display:flex;flex-direction:column;box-shadow:-8px 0 26px #03214705}
+.chat-header{height:74px;flex:none;padding:0 20px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:11px}
+.chat-icon{width:34px;height:34px;border-radius:10px;background:#f1e8f5;color:var(--purple);display:grid;place-items:center}
+.chat-header h2{font-family:Manrope,sans-serif;font-size:13px;margin:0 0 3px;font-weight:800}.chat-header p{font-size:10px;color:#9aa5b4;margin:0}
+.chat-messages{flex:1;min-height:0;overflow:auto;padding:20px 16px;display:flex;flex-direction:column;align-items:flex-start;gap:12px;background:#fbfcfe}
+.chat-message{max-width:90%;border-radius:12px;padding:11px 13px;font-size:12px;line-height:1.55;white-space:pre-wrap;overflow-wrap:anywhere}
+.chat-message.assistant{background:#fff;border:1px solid #e8edf3;color:#51647c;border-top-left-radius:3px;box-shadow:0 2px 8px #03214705}
+.chat-message.user{align-self:flex-end;background:var(--navy);color:#fff;border-top-right-radius:3px}
+.chat-thinking{color:#9aa5b4!important}.chat-action-note{display:block;color:var(--purple);font-size:10px;font-weight:800;margin-top:8px}
+.chat-composer{padding:15px;border-top:1px solid var(--line);background:#fff}.chat-composer label{display:block;font-size:10px;font-weight:800;color:#8d9aaa;margin-bottom:9px}.chat-input-row{display:flex;gap:7px}.chat-input-row input{min-width:0;flex:1;border:1px solid #dce3eb;border-radius:9px;padding:10px 11px;outline:0;color:var(--navy);font-size:11px}.chat-input-row input:focus{border-color:var(--blue);box-shadow:0 0 0 3px #209dd71c}.chat-input-row button{width:38px;border:0;border-radius:9px;background:var(--purple);color:#fff;display:grid;place-items:center}.chat-input-row button:disabled{opacity:.5;cursor:default}.chat-error{font-size:11px;color:#ad4545;margin:0 0 9px}
+@media(max-width:1100px){.app-shell{flex-direction:column}.chat-sidebar{position:static;width:100%;height:380px;border-left:0;border-top:1px solid var(--line)}.chat-header{height:60px}}

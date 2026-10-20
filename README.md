@@ -1,42 +1,45 @@
 # Kanban Board
 
-A simple, single-board Kanban app for organizing work from ideas to completion. It opens with sample cards so you can try it immediately.
+A single-board Kanban app with persistent cards, sign-in, and an AI assistant that can create, edit, and move cards from chat. It starts with sample cards.
 
 Built with AI assistance as a vibe coding project.
 
 ## Features
 
 - Five fixed columns that you can rename.
-- Add cards with a title and optional details, or delete them.
+- Add, edit, or delete cards with a title and optional details.
 - Drag cards to reorder them within a column or move them between columns.
-- See card counts for each column and the board.
+- Ask the assistant about the board or tell it to change multiple cards. Changes apply immediately.
 
-Board state is held in browser memory. Changes reset when you refresh the page; there are no accounts or saved data.
+Cards and columns are saved in SQLite. Chat history lasts for the current page session.
 
 ## Run locally
 
-Install a current Node.js LTS release and npm, then run:
+Install Docker, add your OpenRouter key to a root `.env` file using [`.env.example`](.env.example), then run:
 
 ```sh
-cd frontend
-npm ci
-npm run dev
+./scripts/start.sh
 ```
 
-For a production build, run `npm run build` followed by `npm run start` from `frontend`.
+On Windows, run `scripts\start.bat`. Sign in with `user` / `password`. Stop with `./scripts/stop.sh` or `scripts\stop.bat`. The database stays in a Docker volume.
 
 ## Checks
 
-From `frontend`, run:
+For local checks, install Python 3.13, uv, Node.js 24, and npm. Run these from the repository root:
 
 ```sh
+uv sync
+uv run python -m pytest
+cd frontend
+npm ci
 npm run lint
 npm run typecheck
 npm run test
+npm run build
 npx playwright install
 npm run test:e2e
 ```
 
 ## Stack
 
-Next.js, React, TypeScript, dnd-kit, Vitest, and Playwright. The app lives in [`frontend`](frontend/).
+Static Next.js and React frontend, FastAPI backend, SQLite, OpenRouter (`openai/gpt-oss-120b`), Docker, Vitest, and Playwright.

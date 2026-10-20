@@ -12,3 +12,10 @@ npm-debug.log*
 !.env.example
 
 *.cloud-backup
+.venv/
+__pycache__/
+.pytest_cache/
+*.pyc
+*.db
+*.db-shm
+*.db-wal

@@ -1,0 +1,11 @@
+[project]
+name = "kanban-board"
+version = "0.1.0"
+requires-python = ">=3.13"
+dependencies = ["fastapi", "uvicorn", "httpx", "itsdangerous"]
+
+[dependency-groups]
+dev = ["pytest"]
+
+[tool.pytest.ini_options]
+testpaths = ["backend/tests"]

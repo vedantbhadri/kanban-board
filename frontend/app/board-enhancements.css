@@ -1,0 +1,8 @@
+.card-actions{display:flex;align-items:center;gap:7px}
+.card-edit{border:0;background:transparent;color:#bdc5ce;padding:0;opacity:0;display:grid;place-items:center}
+.task-card:hover .card-edit,.card-edit:focus-visible{opacity:1}
+.card-edit:hover{color:var(--blue)}
+.board-error{background:#fff2f2;color:#a93d3d;border:1px solid #f2caca;border-radius:8px;padding:10px 13px;font-size:12px;margin:0 0 12px}
+.board-grid{grid-template-columns:repeat(5,minmax(164px,1fr));min-width:916px}
+.column-title-row{gap:5px}.column-header{gap:2px}.column-name{font-size:11px}.column-count{min-width:18px}.column-add{padding:0}
+@media(min-width:1101px) and (max-width:1500px){.content-inner{padding-left:30px;padding-right:30px}}

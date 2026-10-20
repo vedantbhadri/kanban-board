@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import "./board-enhancements.css";
+import "./chat.css";
 
 export const metadata: Metadata = {
   title: "Kanban | Project board",

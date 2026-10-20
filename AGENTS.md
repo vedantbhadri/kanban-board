@@ -1,32 +1,52 @@
-# Kanban Project
+# The Project Management MVP web app
 
-## Product
+## Business Requirements
 
-- One Kanban board with five fixed, renameable columns and seeded cards.
-- Cards have a title and details only. Users can add, delete, reorder within a column, and drag between columns.
-- Keep one add button in each column header.
-- No persistence, accounts, archive, search, or filters.
-- Prioritize a polished, simple interface. Keep the workspace sidebar, user profile, and live status display out of the UI.
+This project is building a Project Management App. Key features:
+- A user can sign in
+- When signed in, the user sees a Kanban board representing their project
+- The Kanban board has fixed columns that can be renamed
+- The cards on the Kanban board can be moved with drag and drop, and edited
+- There is an AI chat feature in a sidebar; the AI is able to create / edit / move one or more cards
 
-## Implementation
+## Limitations
 
-- The client-rendered Next.js app lives in `frontend`.
-- Use current, popular libraries and idiomatic approaches.
-- Keep the code simple. Avoid extra features and unnecessary defensive code.
+For the MVP, there will only be a user sign in (hardcoded to 'user' and 'password') but the database will support multiple users for future.
 
-## Color scheme
+For the MVP, there will only be 1 Kanban board per signed in user.
 
-- Accent yellow: `#ecad0a`
-- Primary blue: `#209dd7`
-- Secondary purple: `#753991`
-- Dark navy: `#032147`
-- Gray text: `#888888`
+For the MVP, this will run locally (in a docker container)
 
-## Verification
+## Technical Decisions
 
-- Unit test board state changes and cover core workflows with Playwright.
-- Run lint, type checking, and the production build after code changes.
+- NextJS frontend
+- Python FastAPI backend, including serving the static NextJS site at /
+- Everything packaged into a Docker container
+- Use "uv" as the package manager for python in the Docker container
+- Use OpenRouter for the AI calls. An OPENROUTER_API_KEY is in .env in the project root
+- Use `openai/gpt-oss-120b` as the model
+- Use SQLLite local database for the database, creating a new db if it doesn't exist
+- Start and Stop server scripts for Mac, PC, Linux in scripts/
 
-## Writing
+## Starting Point
 
-- Be concise. Keep the README minimal. Do not use emojis.
+A working MVP of the frontend has been built and is already in frontend. This is not yet designed for the Docker setup. It's a pure frontend-only demo.
+
+## Color Scheme
+
+- Accent Yellow: `#ecad0a` - accent lines, highlights
+- Blue Primary: `#209dd7` - links, key sections
+- Purple Secondary: `#753991` - submit buttons, important actions
+- Dark Navy: `#032147` - main headings
+- Gray Text: `#888888` - supporting text, labels
+
+## Coding standards
+
+1. Use latest versions of libraries and idiomatic approaches as of today
+2. Keep it simple - NEVER over-engineer, ALWAYS simplify, NO unnecessary defensive programming. No extra features - focus on simplicity.
+3. Be concise. Keep README minimal. IMPORTANT: no emojis ever
+4. When hitting issues, always identify root cause before trying a fix. Do not guess. Prove with evidence, then fix the root cause.
+
+## Working documentation
+
+Supporting design documents are in `docs/`. The implementation plan is `PLAN.md` at the repository root; review it before proceeding.

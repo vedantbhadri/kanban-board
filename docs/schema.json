@@ -1,0 +1,49 @@
+{
+  "version": 1,
+  "database": "SQLite",
+  "tables": [
+    {
+      "name": "users",
+      "columns": {
+        "id": "TEXT PRIMARY KEY",
+        "username": "TEXT NOT NULL UNIQUE"
+      }
+    },
+    {
+      "name": "boards",
+      "columns": {
+        "id": "TEXT PRIMARY KEY",
+        "user_id": "TEXT NOT NULL UNIQUE REFERENCES users(id)"
+      }
+    },
+    {
+      "name": "columns",
+      "columns": {
+        "board_id": "TEXT NOT NULL REFERENCES boards(id)",
+        "id": "TEXT NOT NULL",
+        "title": "TEXT NOT NULL",
+        "position": "INTEGER NOT NULL"
+      },
+      "constraints": [
+        "PRIMARY KEY (board_id, id)",
+        "UNIQUE (board_id, position)"
+      ]
+    },
+    {
+      "name": "cards",
+      "columns": {
+        "board_id": "TEXT NOT NULL REFERENCES boards(id)",
+        "id": "TEXT NOT NULL",
+        "column_id": "TEXT NOT NULL",
+        "title": "TEXT NOT NULL",
+        "details": "TEXT NOT NULL DEFAULT ''",
+        "position": "INTEGER NOT NULL"
+      },
+      "constraints": [
+        "PRIMARY KEY (board_id, id)",
+        "FOREIGN KEY (board_id, column_id) REFERENCES columns(board_id, id)"
+      ],
+      "indexes": ["(board_id, column_id, position)"]
+    }
+  ]
+}
