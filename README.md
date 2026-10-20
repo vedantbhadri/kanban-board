@@ -2,7 +2,7 @@
 
 A single-board Kanban app with persistent cards, sign-in, and an AI assistant that can create, edit, and move cards from chat. It starts with sample cards.
 
-Built with AI assistance as a vibe coding project.
+This project was built with AI assistance using a vibe coding approach.
 
 ## Features
 
