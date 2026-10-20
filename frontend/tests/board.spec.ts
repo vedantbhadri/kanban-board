@@ -97,6 +97,42 @@ test("reorders cards in the same column", async ({ page }) => {
   await expect(ideas.locator(".task-card h3")).toHaveText(["Explore visual direction", "Map user journey"]);
 });
 
+test("keeps the drag preview aligned with the card", async ({ page }) => {
+  await page.goto("/");
+  await signIn(page);
+  const card = page.getByRole("region", { name: "Ideas column" }).getByRole("article", { name: "Explore visual direction" });
+  const source = await card.boundingBox();
+  if (!source) throw new Error("Card missing");
+  await page.mouse.move(source.x + source.width / 2, source.y + source.height / 2);
+  await page.mouse.down();
+  await page.mouse.move(source.x + source.width / 2 + 30, source.y + source.height / 2 + 20, { steps: 6 });
+  const preview = await page.locator(".task-card-overlay").boundingBox();
+  expect(preview).not.toBeNull();
+  expect(Math.abs(preview!.width - source.width)).toBeLessThan(2);
+  await expect(card.locator("..")).toHaveCSS("transform", "none");
+  await page.keyboard.press("Escape");
+});
+
+test("shows a moved card before the save response arrives", async ({ page }) => {
+  await page.goto("/");
+  await signIn(page);
+  let releaseSave: (() => void) | undefined;
+  const saveHeld = new Promise<void>((resolve) => { releaseSave = resolve; });
+  await page.route("**/api/cards/c1/move", async (route) => {
+    await saveHeld;
+    await route.continue();
+  });
+  const ideas = page.getByRole("region", { name: "Ideas column" });
+  const done = page.getByRole("region", { name: "Done column" });
+  try {
+    await dragCard(page, ideas.getByRole("article", { name: "Explore visual direction" }), done, 90);
+    await expect(done).toContainText("Explore visual direction");
+  } finally {
+    releaseSave?.();
+  }
+  await expect.poll(async () => (await page.evaluate(async () => (await fetch("/api/board")).json())).cards.find((card: { id: string }) => card.id === "c1")?.columnId).toBe("done");
+});
+
 test("moves a card between columns", async ({ page }) => {
   await page.goto("/");
   await signIn(page);

@@ -3,7 +3,7 @@
 import { useEffect, useState, type FormEvent } from "react";
 import { DndContext, DragOverlay, PointerSensor, TouchSensor, pointerWithin, rectIntersection, useDraggable, useDroppable, useSensor, useSensors, type CollisionDetection, type DragEndEvent } from "@dnd-kit/core";
 import { ArrowUpRight, Check, GripVertical, LayoutGrid, LogOut, Pencil, Plus, X } from "lucide-react";
-import { type BoardState, type Card, type Column } from "@/lib/board";
+import { boardReducer, type BoardState, type Card, type Column } from "@/lib/board";
 import ChatSidebar from "@/components/chat-sidebar";
 
 const columnColors = ["yellow", "blue", "purple", "peach", "green"];
@@ -29,13 +29,12 @@ function TaskCard({ card, onDelete, onEdit, overlay = false }: { card: Card; onD
 }
 
 function DraggableCard({ card, onDelete, onEdit, dropAfter }: { card: Card; onDelete: (id: string) => void; onEdit: (card: Card) => void; dropAfter: boolean }) {
-  const { attributes, listeners, setNodeRef: setDragRef, transform, isDragging } = useDraggable({ id: card.id });
+  const { attributes, listeners, setNodeRef: setDragRef, isDragging } = useDraggable({ id: card.id });
   const { setNodeRef: setDropRef, isOver } = useDroppable({ id: `card:${card.id}` });
   return (
     <div
       ref={(node) => { setDragRef(node); setDropRef(node); }}
       className={`draggable${isDragging ? " is-dragging" : ""}${isOver && !isDragging ? ` card-drop-target${dropAfter ? " drop-after" : ""}` : ""}`}
-      style={transform ? { transform: `translate3d(${transform.x}px, ${transform.y}px, 0)` } : undefined}
       {...listeners}
       {...attributes}
     >
@@ -145,13 +144,15 @@ export default function Board({ onLogout }: { onLogout: () => void }) {
     setActiveId(null);
     if (!event.over || !board) return;
     const targetId = String(event.over.id);
-    if (targetId.startsWith("card:")) {
-      const targetCardId = targetId.slice(5);
-      const targetCard = board.cards.find((card) => card.id === targetCardId);
-      if (targetCard) await mutate(`/api/cards/${event.active.id}/move`, "POST", { columnId: targetCard.columnId, targetCardId });
-    } else {
-      await mutate(`/api/cards/${event.active.id}/move`, "POST", { columnId: targetId });
-    }
+    const targetCardId = targetId.startsWith("card:") ? targetId.slice(5) : undefined;
+    const targetCard = board.cards.find((card) => card.id === targetCardId);
+    const columnId = targetCard?.columnId ?? targetId;
+    const cardId = String(event.active.id);
+    const nextBoard = boardReducer(board, { type: "move", cardId, columnId, targetCardId });
+    if (nextBoard === board) return;
+    setBoard(nextBoard);
+    const saved = await mutate(`/api/cards/${cardId}/move`, "POST", { columnId, targetCardId });
+    if (!saved) setBoard((current) => current === nextBoard ? board : current);
   }
 
   if (!board) return <div className="auth-loading">{error || "Loading your board..."}</div>;
@@ -169,7 +170,7 @@ export default function Board({ onLogout }: { onLogout: () => void }) {
           {error && <div className="board-error" role="alert">{error}</div>}
           <DndContext id="project-board" sensors={sensors} collisionDetection={cardFirstCollision} onDragStart={(event) => setActiveId(String(event.active.id))} onDragEnd={endDrag} onDragCancel={() => setActiveId(null)}>
             <div className="board-scroll"><div className="board-grid">{board.columns.map((column, index) => <BoardColumn key={column.id} column={column} index={index} cards={board.cards.filter((card) => card.columnId === column.id)} activeCardId={activeId} onRename={(columnId, name) => { void mutate(`/api/columns/${columnId}`, "PATCH", { title: name }); }} onAdd={openAdd} onDelete={(cardId) => { void mutate(`/api/cards/${cardId}`, "DELETE"); }} onEdit={openEdit} />)}</div></div>
-            <DragOverlay>{activeCard ? <TaskCard card={activeCard} overlay /> : null}</DragOverlay>
+            <DragOverlay dropAnimation={null}>{activeCard ? <TaskCard card={activeCard} overlay /> : null}</DragOverlay>
           </DndContext>
           <div className="board-help"><span>TIP</span> Drag cards to reorder them or move them between columns. <ArrowUpRight size={15} /></div>
         </div>
